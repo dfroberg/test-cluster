@@ -5,11 +5,6 @@ metadata:
   name: cluster-settings
   namespace: flux-system
 data:
-  # User for i.e. Hajimari to greet you with your name
-  YOUR_NAME: Danny
-  # Used in ClusterRoleBinding to allow access via https://kubeconf.${SECRET_DOMAIN} generated kubeconf
-  DEX_KUBECTL_USERNAME: dfroberg
-  DEX_KUBECTL_ADMIN_GROUP: admins
   # What TimeZone are your cluster located in
   CLUSTER_TZ: "Europe/Stockholm"
   # CIDRs
@@ -33,20 +28,10 @@ data:
 
   #
   SVC_SYSLOG_ADDR: "192.168.69.101"
-  SVC_QBITTORRENT_ADDR: "192.168.69.102"
-  SVC_INFLUXDB_IP: "192.168.69.112"
-  SVC_JELLYFIN_ADDR: "192.168.69.113"
-  SVC_PLEX_ADDR: "192.168.69.114"
-  SVC_TVHEADEND_ADDR: "192.168.69.115"
-  SVC_XTEVE_ADDR: "192.168.69.116"
+
 
   # NAS NFS Configs
   NAS_ADDR: "192.168.3.113"
   NAS_BASE_PATH: "/mnt/data/nfs/Recordings"
   NAS_BACKUP_PATH: "/mnt/data/nfs/backups"
   NAS_PVC_PATH: "/mnt/data/nfs/PersistentVolumeClaims"
-  # vpn-gateway Config
-  VPN_PORT: "51820"
-  VPN_COUNTRY:  "Netherlands"
-  VPN_GATEWAY_VPN_PORT: "57683"
-  VPN_FORWARDED_PORT_1: "57683"
