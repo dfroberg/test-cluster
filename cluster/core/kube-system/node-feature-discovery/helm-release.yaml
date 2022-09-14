@@ -1,0 +1,106 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: node-feature-discovery
+  namespace: kube-system
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://kubernetes-sigs.github.io/node-feature-discovery/charts
+      chart: node-feature-discovery
+      version: 0.11.2
+      sourceRef:
+        kind: HelmRepository
+        name: node-feature-discovery-charts
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    master:
+      tolerations:
+        - effect: NoExecute
+          operator: Exists
+        - effect: NoSchedule
+          operator: Exists
+        - effect: NoExecute
+          key: node.kubernetes.io/not-ready
+          operator: Exists
+          tolerationSeconds: 300
+        - effect: NoExecute
+          key: node.kubernetes.io/unreachable
+          operator: Exists
+          tolerationSeconds: 300
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                  - key: "node-role.kubernetes.io/master"
+                    operator: In
+                    values: [""]
+    worker:
+      annotations:
+        configmap.reloader.stakater.com/reload: node-feature-discovery-worker-conf
+      #nodeSelector:
+      #  node-role.kubernetes.io/worker: "true"
+      config:
+        core:
+          labelSources:
+            - custom
+            - pci
+            - usb
+        sources:
+          pci:
+            deviceClassWhitelist:
+              - "0200"
+              - "03"
+              - "12"
+            deviceLabelFields:
+              - "class"
+              - "vendor"
+              - "device"
+              - "subsystem_vendor"
+              - "subsystem_device"
+          usb:
+            deviceClassWhitelist:
+              - "02"
+              - "03"
+              - "0e"
+              - "ef"
+              - "fe"
+              - "ff"
+            deviceLabelFields:
+              - class
+              - vendor
+              - device
+          custom:
+            - name: nvidia-vgpu
+              matchOn:
+                - pciId:
+                    class: ["0302"]
+                    vendor: ["1414"]
+                    device: ["008e"]
+            - name: intel-gpu
+              matchOn:
+                - pciId:
+                    class: ["0300"]
+                    vendor: ["8086"]
+      tolerations:
+        - effect: "NoExecute"
+          operator: "Exists"
+        - effect: "NoSchedule"
+          operator: "Exists"
+      resources:
+        requests:
+          cpu: 50m
+          memory: 263M
+        limits:
+          cpu: 1024m
+          memory: 512M
