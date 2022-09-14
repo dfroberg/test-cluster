@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - gotk-components.yaml
+  - gotk-sync.yaml
+  - charts
+patchesStrategicMerge:
+  - ./gotk-patch-sops.yaml
+  - ./gotk-patch-source-controller.yaml
+  - ./gotk-patch-helm-controller.yaml
+  - ./gotk-patch-kustomize-controller.yaml

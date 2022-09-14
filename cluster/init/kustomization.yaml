@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespaces
+  - cluster-settings.yaml
+  - cluster-sops-keys/cluster-secrets.yaml
+  - cluster-sops-keys/cluster-secrets.sops.yaml
+  - cluster-sops-keys/cluster-secrets-repo.yaml
+  - cluster-sops-keys/regcred.sops.yaml
+
+patchesStrategicMerge: []
+  #- ./init-patches.yaml
