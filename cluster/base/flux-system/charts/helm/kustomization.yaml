@@ -6,4 +6,6 @@ resources:
   - metrics-server-charts.yaml
   - nfs-subdir-external-provisioner-charts.yaml
   - node-feature-discovery-charts.yaml
+  - stakater-charts.yaml
+
 
